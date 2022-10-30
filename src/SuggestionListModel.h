@@ -2,6 +2,7 @@
 #define SUGGESTIONLISTMODEL_H
 
 //#include "core.h"
+#include <QObject>
 #include <QAbstractListModel>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -9,7 +10,7 @@
 class SuggestionListModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(QNetworkAccessManager* transport READ getTransport WRITE setTransport)
+    Q_PROPERTY(QNetworkAccessManager* transport MEMBER _transport)
 public:
     explicit SuggestionListModel(QObject *parent = nullptr);
 

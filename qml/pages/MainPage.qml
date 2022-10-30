@@ -123,9 +123,33 @@ Page {
                 Label {
                     text: display
                 }
+                onClicked: translationListModel.getTranslations(text, core.toLang, core.fromLang)
             }
 
             VerticalScrollDecorator {}
+        }
+
+        TranslationListModel {
+            id: translationListModel
+
+            transport: core.transport
+        }
+
+        SilicaListView {
+            id: translationView
+
+            anchors {
+                top: searchField.bottom
+                bottom: parent.bottom
+            }
+
+            delegate: ListItem {
+                Label {
+                    text: display
+                }
+            }
+
+            model: translationListModel
         }
 
     }

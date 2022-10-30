@@ -1,13 +1,14 @@
 #ifndef TRANSLATIONLISTMODEL_H
 #define TRANSLATIONLISTMODEL_H
 
+#include <QObject>
 #include <QAbstractListModel>
 #include <QNetworkAccessManager>
 
 class TranslationListModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(transport MEMBER _transport)
+    Q_PROPERTY(QNetworkAccessManager *transport MEMBER _transport)
 public:
     explicit TranslationListModel(QObject *parent = nullptr);
 
@@ -28,7 +29,7 @@ private:
     void clear();
 private:
     QNetworkAccessManager * _transport;
-    QVariantMap _translations;
+    QVariantList _translations;
 
 };
 

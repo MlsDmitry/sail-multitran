@@ -53,10 +53,6 @@ SuggestionListModel::onSuggestionsReceived()
     beginResetModel();
     _suggestions = std::move(newSuggestions);
     endResetModel();
-
-//    _suggestions.append(QString("Item"));
-
-//    emit dataChanged(index(0), index(_suggestions.count()), { SuggestionListModel::RoleDisplay });
 }
 
 QVariant
@@ -72,27 +68,12 @@ int SuggestionListModel::rowCount(const QModelIndex&) const{
 }
 
 
-void
-SuggestionListModel::setTransport(QNetworkAccessManager * transport)
-{
-    _transport = transport;
-    qDebug() << "Transport set";
-}
-
-
-QNetworkAccessManager*
-SuggestionListModel::getTransport()
-{
-//    if ()
-//    throw "SuggestionListModel->_transport not set";
-    return _transport;
-}
-
-
 QHash<int,QByteArray>
 SuggestionListModel::roleNames() const
 {
     QHash<int,QByteArray> roles;
+
     roles.insert(SuggestionListModel::RoleDisplay, "display");
+
     return roles;
 }

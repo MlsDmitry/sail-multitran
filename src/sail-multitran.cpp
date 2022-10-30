@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     context->setContextProperty("core", &core);
 
     qmlRegisterType<SuggestionListModel>("harbour.multitran", 1, 0, "SuggestionListModel");
+    qmlRegisterType<SuggestionListModel>("harbour.multitran", 1, 0, "TranslationListModel");
 
 
     view->setSource(SailfishApp::pathTo("qml/sail-multitran.qml"));
