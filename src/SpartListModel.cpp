@@ -83,6 +83,12 @@ SpartListModel::onTranslationsReceived()
                             qDebug() << "spart: " << spart_str << " translation: " << trans_json.toObject()["tran"];
 
 //                            translation_model->translations.append(trans_json.toObject()["tran"].toString());
+                            QVariantMap data;
+                            data.insert("spart", spart_str);
+                            data.insert("subject", subject["subj"].toString());
+                            data.insert("translation", trans_json.toObject()["tran"].toString());
+                            data.insert("comment", trans_json.toObject()["comm"].toString());
+                            newTranslations.append(data);
                         }
 //                        subject_model->append(translation_model);
                     }
@@ -98,9 +104,9 @@ SpartListModel::onTranslationsReceived()
 
    reply->deleteLater();
 
-//    beginResetModel();
-//    _subjects = std::move(newTranslations);
-//    endResetModel();
+    beginResetModel();
+    _subjects = std::move(newTranslations);
+    endResetModel();
 }
 
 //SpartListModel::~SpartListModel()
@@ -132,13 +138,15 @@ SpartListModel::data(const QModelIndex &index, int role) const {
     if (!index.isValid())
         return QVariant();
 
-    QVariant data = _subjects.at(index.row());
+    QVariantMap data = qvariant_cast<QVariantMap>(_subjects.at(index.row()));
     if (role == SpartListModel::TypeSpart) {
-        return data. ->value("spart");
+        return data.value("spart");
     } else if (role == SpartListModel::TypeSubject) {
-        return data->value("subject");
+        return data.value("subject");
     } else if (role == SpartListModel::TypeTranslation) {
-        return data->value("translation");
+        return data.value("translation");
+    } else if (role == SpartListModel::TypeComment) {
+        return data.value("comment");
     }
     return QVariant();
 }
@@ -157,7 +165,8 @@ SpartListModel::roleNames() const
 
     roles.insert(SpartListModel::TypeSpart, "spart");
     roles.insert(SpartListModel::TypeSubject, "subject");
-    roles.insert(SpartListModel::TypeTranslation, "translaiton");
+    roles.insert(SpartListModel::TypeTranslation, "translation");
+    roles.insert(SpartListModel::TypeComment, "comment");
     return roles;
 }
 

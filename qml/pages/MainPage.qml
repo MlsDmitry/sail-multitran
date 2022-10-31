@@ -86,7 +86,6 @@ Page {
 
             onTextChanged: {
                 suggestionListModel.getSuggestions(text, core.toLang, core.fromLang)
-                console.log(text)
             }
 
             onFocusChanged: {
@@ -99,6 +98,7 @@ Page {
 
             EnterKey.enabled: text.length > 0
             EnterKey.onClicked: {
+                searchField.focus = false;
                 translationView.visible = true;
                 suggestionView.visible = false;
                 spartListModel.getTranslations(text, core.toLang, core.fromLang);
@@ -162,6 +162,9 @@ Page {
         SilicaListView {
             id: translationView
 
+            property string cur_subj: ""
+            property Component comp;
+
             anchors {
                 top: searchField.bottom
                 bottom: parent.bottom
@@ -183,47 +186,92 @@ Page {
                 }
             }
 
-            delegate: Component {
+
+            Component {
+                id: translationUnitDelegate
+
+                //                Loader {
+                //                    sourceComponent: translationView.current_subject.match(subject) ? transUnit : transSubjectUnit
+                //                }
+
                 SilicaListView {
-                    anchors.fill: parent
+                    id: translationListView
 
-                    model: subjectModel
+                    width: parent.width
+                    height: translationText.height + subjectText.height
 
-                    section {
-                        property: "subject"
-                        criteria: ViewSection.FullString
-                        delegate: SectionHeader {
-                            text: section
+//                    spacing: 200
+                    Label {
+                        id: subjectText
+                        text: subject
+                        font.bold: true
+
+                        anchors {
+                            left: parent.left
+                            horizontalCenter: parent.left
                         }
+
+                        color: Theme.highlightColor
+                        visible: true
                     }
+                    states: [
+                        State {
+                            name: "display subject"
+                            PropertyChanges {
+                                target: subjectText
+                                visible: true
+                            }
+                            PropertyChanges {
+                                target: translationListView
+                                height: translationText.height + subjectText.height
+                            }
+                        },
+                        State {
+                            name: "hide subject"
+                            PropertyChanges {
+                                target: subjectText
+                                visible: false
 
-                    delegate: Component {
-                        SilicaListView {
-                            anchors.fill: translationView
-                            width: translationView.width
-                            height: translationView.height
-
-                            model: translationModel
-
-                            delegate: Label {
-                                text: display
                             }
                         }
+
+                    ]
+
+                    Label {
+                        id: translationText
+
+                        text: translation + (comment.length === 0 ? "" : " <font color=\"gray\">(" + comment + ")</font>")
+                        textFormat: Text.RichText
+                        wrapMode: Text.Wrap
+                        truncationMode: TruncationMode.Fade
+                        width: parent.width
+                        anchors {
+                            top: subjectText.bottom
+                            left: parent.left
+                            leftMargin: 80
+                        }
+
+//                        readOnly: true
+
+                        Component.onCompleted: {
+                            if (translationView.cur_subj.localeCompare(subject) !== 0) {
+                                translationListView.state = "display subject";
+                            } else {
+                                translationListView.state = "hide subject";
+                            }
+                            translationView.cur_subj = subject;
+                        }
                     }
+
                 }
             }
+
+            delegate: translationUnitDelegate
+
             VerticalScrollDecorator {}
+
         }
-
+        VerticalScrollDecorator {}
     }
-
-    //    Components.SuggestionListView {
-    //        id: suggestionView
-
-    //        anchors.fill: parent
-    //        anchors.top: searchField.bottom
-
-    //    }
-
 
 }

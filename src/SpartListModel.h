@@ -15,12 +15,13 @@ class SpartListModel : public QAbstractListModel
     Q_PROPERTY(QNetworkAccessManager *transport MEMBER _transport)
 public:
     explicit SpartListModel(QObject *parent = nullptr);
-    ~SpartListModel();
+//    ~SpartListModel();
 
     enum Roles {
         TypeSpart = Qt::UserRole + 1,
         TypeSubject,
-        TypeTranslation
+        TypeTranslation,
+        TypeComment
     };
 
     Q_ENUM(Roles)
