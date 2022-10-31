@@ -38,26 +38,28 @@ Page {
 
     //            placeholderText: "Enter term to translate"
 
-//                onTextChanged: {
-//                    core.onSearchTextChanged(text)
-//                    console.log(text)
-//                }
+    //                onTextChanged: {
+    //                    core.onSearchTextChanged(text)
+    //                    console.log(text)
+    //                }
 
-//                onFocusChanged: suggestionView.visible = focus;
-//            }
+    //                onFocusChanged: suggestionView.visible = focus;
+    //            }
 
-//            Connections {
-//                target: core
+    //            Connections {
+    //                target: core
 
-//                onCompletionTermsReceived: {
-//                    console.log("onCompletionTermsReceived from js");
-//                }
-//            }
+    //                onCompletionTermsReceived: {
+    //                    console.log("onCompletionTermsReceived from js");
+    //                }
+    //            }
 
     //    }
 
     SilicaFlickable {
-        anchors.fill: parent
+        anchors {
+            fill: parent
+        }
 
         VerticalScrollDecorator {}
 
@@ -90,16 +92,26 @@ Page {
             onFocusChanged: {
                 translationView.visible = !focus;
                 suggestionView.visible = focus;
+                if (focus) {
+                    searchField.select(0, text.length);
+                }
+            }
+
+            EnterKey.enabled: text.length > 0
+            EnterKey.onClicked: {
+                translationView.visible = true;
+                suggestionView.visible = false;
+                spartListModel.getTranslations(text, core.toLang, core.fromLang);
             }
         }
 
-//        Connections {
-//            target: core
+        //        Connections {
+        //            target: core
 
-//            onCompletionTermsReceived: {
-//                console.log("onCompletionTermsReceived from js");
-//            }
-//        }
+        //            onCompletionTermsReceived: {
+        //                console.log("onCompletionTermsReceived from js");
+        //            }
+        //        }
 
 
         SuggestionListModel {
@@ -108,11 +120,12 @@ Page {
             transport: core.transport
         }
 
-        TranslationListModel {
-            id: translationListModel
+        SpartListModel {
+            id: spartListModel
 
             transport: core.transport
         }
+
 
         SilicaListView {
             id: suggestionView
@@ -120,7 +133,11 @@ Page {
             anchors {
                 top: searchField.bottom
                 bottom: parent.bottom
+                left: parent.left
+                right: parent.right
+                margins: Theme.paddingLarge
             }
+
             width: parent.width
             height: parent.height
 
@@ -135,7 +152,7 @@ Page {
                 onClicked: {
                     translationView.visible = true;
                     searchField.text = display
-                    translationListModel.getTranslations(display, core.toLang, core.fromLang);
+                    spartListModel.getTranslations(display, core.toLang, core.fromLang);
                 }
             }
 
@@ -148,7 +165,12 @@ Page {
             anchors {
                 top: searchField.bottom
                 bottom: parent.bottom
+                left: parent.left
+                right: parent.right
+                margins: Theme.paddingLarge
             }
+
+            model: spartListModel
 
             width: parent.width
             height: parent.height
@@ -158,16 +180,38 @@ Page {
                 criteria: ViewSection.FullString
                 delegate: SectionHeader {
                     text: section
-//                    color: Theme.highlightColor
                 }
             }
 
-            delegate: Label {
-                    text: translation
+            delegate: Component {
+                SilicaListView {
+                    anchors.fill: parent
+
+                    model: subjectModel
+
+                    section {
+                        property: "subject"
+                        criteria: ViewSection.FullString
+                        delegate: SectionHeader {
+                            text: section
+                        }
+                    }
+
+                    delegate: Component {
+                        SilicaListView {
+                            anchors.fill: translationView
+                            width: translationView.width
+                            height: translationView.height
+
+                            model: translationModel
+
+                            delegate: Label {
+                                text: display
+                            }
+                        }
+                    }
                 }
-
-            model: translationListModel
-
+            }
             VerticalScrollDecorator {}
         }
 

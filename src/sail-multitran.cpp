@@ -10,9 +10,10 @@
 
 #include "core.h"
 #include "SuggestionListModel.h"
+#include "SpartListModel.h"
+#include "SubjectListModel.h"
 #include "TranslationListModel.h"
 #include "demomodel.h"
-#include "spart.h"
 
 int main(int argc, char *argv[])
 {
@@ -36,11 +37,10 @@ int main(int argc, char *argv[])
     context->setContextProperty("core", &core);
 
 //    qRegisterMetaType<Spart>("Spart");
-
-    qmlRegisterType<Spart>("harbour.multitran", 1, 0, "Spart");
     qmlRegisterType<SuggestionListModel>("harbour.multitran", 1, 0, "SuggestionListModel");
-    qmlRegisterType<TranslationListModel>("harbour.multitran", 1, 0, "TranslationListModel");
-
+    qmlRegisterType<SpartListModel>("harbour.multitran", 1, 0, "SpartListModel");
+//    qmlRegisterType<SubjectListModel>("harbour.multitran", 1, 0, "SubjectListModel");
+//    qmlRegisterType<TranslationListModel>("harbour.multitran", 1, 0, "TranslationListModel");
 
     view->setSource(SailfishApp::pathTo("qml/sail-multitran.qml"));
     view->show();

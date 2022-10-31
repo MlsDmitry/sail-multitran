@@ -64,7 +64,7 @@ SuggestionListModel::data(const QModelIndex &index, int role) const {
 }
 
 int SuggestionListModel::rowCount(const QModelIndex&) const{
-    return _suggestions.size();
+    return _suggestions.count();
 }
 
 
