@@ -32,7 +32,7 @@ SpartListModel::onTranslationsReceived()
 
     } else {
         try {
-            clear();
+//            clear();
 
             QJsonArray sparts = Core::getTranslationJsonList(reply);
 
@@ -65,8 +65,8 @@ SpartListModel::onTranslationsReceived()
 
                 QString spart_str = spart_json.toObject()["spart"].toString();
 
-                SubjectListModel* subject_model = new SubjectListModel;
-                subject_model->spart = spart_str;
+//                SubjectListModel* subject_model = new SubjectListModel;
+//                subject_model->spart = spart_str;
 
                 for (const QJsonValue& orig_json : origs) {
                     QJsonArray subjects = orig_json.toObject()["subjs"].toArray();
@@ -75,19 +75,19 @@ SpartListModel::onTranslationsReceived()
                         QJsonObject subject = subject_json.toObject();
                         QJsonArray trans = subject["tr"].toArray();
 
-                        TranslationListModel* translation_model = new TranslationListModel;
-                        translation_model->subject = subject["subj"].toString();
+//                        TranslationListModel* translation_model = new TranslationListModel;
+//                        translation_model->subject = subject["subj"].toString();
 
 
                         for (const QJsonValue& trans_json : trans) {
                             qDebug() << "spart: " << spart_str << " translation: " << trans_json.toObject()["tran"];
 
-                            translation_model->translations.append(trans_json.toObject()["tran"].toString());
+//                            translation_model->translations.append(trans_json.toObject()["tran"].toString());
                         }
-                        subject_model->append(translation_model);
+//                        subject_model->append(translation_model);
                     }
                 }
-                append(subject_model);
+//                append(subject_model);
 
             }
 
@@ -103,28 +103,28 @@ SpartListModel::onTranslationsReceived()
 //    endResetModel();
 }
 
-SpartListModel::~SpartListModel()
-{
-    qDeleteAll(_subjects);
-    _subjects.clear();
-}
+//SpartListModel::~SpartListModel()
+//{
+//    qDeleteAll(_subjects);
+//    _subjects.clear();
+//}
 
-void
-SpartListModel::append(SubjectListModel *item)
-{
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    _subjects.append(item);
-    endInsertRows();
-}
+//void
+//SpartListModel::append(SubjectListModel *item)
+//{
+//    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+//    _subjects.append(item);
+//    endInsertRows();
+//}
 
-void
-SpartListModel::clear()
-{
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    qDeleteAll(_subjects);
-    _subjects.clear();
-    endInsertRows();
-}
+//void
+//SpartListModel::clear()
+//{
+//    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+//    qDeleteAll(_subjects);
+//    _subjects.clear();
+//    endInsertRows();
+//}
 
 QVariant
 SpartListModel::data(const QModelIndex &index, int role) const {
@@ -132,11 +132,13 @@ SpartListModel::data(const QModelIndex &index, int role) const {
     if (!index.isValid())
         return QVariant();
 
-    SubjectListModel* subject = _subjects.at(index.row());
+    QVariant data = _subjects.at(index.row());
     if (role == SpartListModel::TypeSpart) {
-        return subject->spart;
-    } else if (role == SpartListModel::TypeSubjectModel) {
-        return QVariant::fromValue(subject->translations);
+        return data. ->value("spart");
+    } else if (role == SpartListModel::TypeSubject) {
+        return data->value("subject");
+    } else if (role == SpartListModel::TypeTranslation) {
+        return data->value("translation");
     }
     return QVariant();
 }
@@ -154,41 +156,41 @@ SpartListModel::roleNames() const
     QHash<int,QByteArray> roles;
 
     roles.insert(SpartListModel::TypeSpart, "spart");
-    roles.insert(SpartListModel::TypeSubjectModel, "subjectModel");
-
+    roles.insert(SpartListModel::TypeSubject, "subject");
+    roles.insert(SpartListModel::TypeTranslation, "translaiton");
     return roles;
 }
 
 
-bool SpartListModel::insertRows(int position, int rows, SubjectListModel *item, const QModelIndex &index)
-{
-    Q_UNUSED(index);
-    if (!(_subjects.contains(item)))
-    {
-        beginInsertRows(QModelIndex(), position, position+rows-1);
-        for (int row = 0; row < rows; ++row) {
-            if (!(_subjects.contains(item)))
-            {
-                _subjects.insert(position, item);
-            }
-        }
-        endInsertRows();
-    }
-    return true;
-}
+//bool SpartListModel::insertRows(int position, int rows, SubjectListModel *item, const QModelIndex &index)
+//{
+//    Q_UNUSED(index);
+//    if (!(_subjects.contains(item)))
+//    {
+//        beginInsertRows(QModelIndex(), position, position+rows-1);
+//        for (int row = 0; row < rows; ++row) {
+//            if (!(_subjects.contains(item)))
+//            {
+//                _subjects.insert(position, item);
+//            }
+//        }
+//        endInsertRows();
+//    }
+//    return true;
+//}
 
-bool SpartListModel::removeRows(int position, int rows, const QModelIndex &index)
-{
-    Q_UNUSED(index);
-    if((position +rows) > _subjects.size())
-    {
-        return false;
-    }
+//bool SpartListModel::removeRows(int position, int rows, const QModelIndex &index)
+//{
+//    Q_UNUSED(index);
+//    if((position +rows) > _subjects.size())
+//    {
+//        return false;
+//    }
 
-    beginRemoveRows(QModelIndex(), position, position+rows-1);
-    for (int row = 0; row < rows; ++row) {
-        _subjects.removeAt(position);
-    }
-    endRemoveRows();
-    return true;
-}
+//    beginRemoveRows(QModelIndex(), position, position+rows-1);
+//    for (int row = 0; row < rows; ++row) {
+//        _subjects.removeAt(position);
+//    }
+//    endRemoveRows();
+//    return true;
+//}
