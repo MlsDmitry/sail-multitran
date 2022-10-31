@@ -30,8 +30,10 @@ void
 SubjectListModel::append(TranslationListModel *item)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
+//    beginResetModel();
     translations.append(item);
     endInsertRows();
+//    endResetModel();
 }
 
 void

@@ -82,7 +82,7 @@ SpartListModel::onTranslationsReceived()
                         for (const QJsonValue& trans_json : trans) {
                             qDebug() << "spart: " << spart_str << " translation: " << trans_json.toObject()["tran"];
 
-                            translation_model->translations.append(trans_json.toObject()["tran"].toString());
+                            translation_model->append(trans_json.toObject()["tran"].toString());
                         }
                         subject_model->append(translation_model);
                     }

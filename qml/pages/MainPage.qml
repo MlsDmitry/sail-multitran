@@ -183,35 +183,32 @@ Page {
                 }
             }
 
-            delegate: Component {
-                SilicaListView {
-                    anchors.fill: parent
+            delegate: SilicaListView {
+                anchors.fill: parent
 
-                    model: subjectModel
+                model: subjectModel
 
-                    section {
-                        property: "subject"
-                        criteria: ViewSection.FullString
-                        delegate: SectionHeader {
-                            text: section
-                        }
+                section {
+                    property: "subject"
+                    criteria: ViewSection.FullString
+                    delegate: SectionHeader {
+                        text: section
                     }
+                }
 
-                    delegate: Component {
-                        SilicaListView {
-                            anchors.fill: translationView
-                            width: translationView.width
-                            height: translationView.height
+                delegate: SilicaListView {
+                    anchors.fill: translationView
+                    width: translationView.width
+                    height: translationView.height
 
-                            model: translationModel
+                    model: translationModel
 
-                            delegate: Label {
-                                text: display
-                            }
-                        }
+                    delegate: Label {
+                        text: display
                     }
                 }
             }
+
             VerticalScrollDecorator {}
         }
 

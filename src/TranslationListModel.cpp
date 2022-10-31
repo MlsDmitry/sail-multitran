@@ -15,6 +15,23 @@ TranslationListModel::roleNames() const
     return roles;
 }
 
+void
+TranslationListModel::append(QString item)
+{
+//    beginInsertRows(QModelIndex());
+    beginResetModel();
+    translations.append(item);
+//    endInsertRows();
+    endResetModel();
+}
+
+//void
+//TranslationListModel::set(QVariantList& data)
+//{
+//    beginResetModel();
+//    translations = std::move(data);
+//    endResetModel();
+//}
 
 
 QVariant

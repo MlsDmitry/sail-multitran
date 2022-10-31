@@ -29,6 +29,7 @@ public:
     bool insertRows(int position, int rows, TranslationListModel *item, const QModelIndex &index = QModelIndex());
     bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex());
 
+//    void set(QVariantList& data)
     void append(TranslationListModel *item);
     void clear();
 
