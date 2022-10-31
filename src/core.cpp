@@ -43,7 +43,7 @@ Core::getSuggestionJsonList(QNetworkReply * reply)
     return root_map["data"].toList();
 }
 
-QVariantList
+QJsonArray
 Core::getTranslationJsonList(QNetworkReply *reply)
 {
     auto json_reply = QJsonDocument::fromJson(reply->readAll());
@@ -73,11 +73,11 @@ Core::getTranslationJsonList(QNetworkReply *reply)
      *  [
      *      "verb": {
      *          spelling: "original spelling"
-     *          "general": {
+     *          "general": [
      *              translation1,
      *              translation2,
      *              translation3
-     *          },
+     *          ],
      *          "spoken": {
      *              ...
      *          }
@@ -85,10 +85,14 @@ Core::getTranslationJsonList(QNetworkReply *reply)
      *      ...
      *  ]
     */
+
+    return sparts;
+
     QVariantList translations;
 
 
     for (const QJsonValue& spart_json : sparts) {
+
         /*
          *  spart_json
          *
@@ -116,13 +120,30 @@ Core::getTranslationJsonList(QNetworkReply *reply)
 
         QJsonArray origs = spart_json.toObject()["origs"].toArray();
 
+        QString spart_str = spart_json.toObject()["spart"].toString();
+
+        spart.insert(spart_str, QVariantMap());
+
+
         for (const QJsonValue& orig_json : origs) {
             QJsonArray subjects = orig_json.toObject()["subjs"].toArray();
 
             for (const QJsonValue& subject_json : subjects) {
+                QJsonObject subject = subject_json.toObject();
+                QJsonArray trans = subject["tr"].toArray();
+                spart[spart_str].value<QVariantMap>().insert(
+                            subject["subj"].toString(), QVariantList());
 
+                for (const QJsonValue& trans_json : trans) {
+                    spart[spart_str].value<QVariantMap>()[subject["subj"].toString()].value<QVariantList>().append(trans_json.toString());
+                    qDebug() << "translation: " << trans_json.toObject()["tran"];
+                }
             }
         }
+        translations.append(spart);
 
     }
+
+
+//    return translations;
 }

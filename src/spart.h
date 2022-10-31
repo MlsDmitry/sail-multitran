@@ -19,17 +19,25 @@
 #define SPART_H
 
 #include <QObject>
+#include <QVariantList>
+#include <QString>
 
 
 
-class Spart
+class Spart : public QObject
 {
     Q_OBJECT
 public:
+//    Q_PROPERTY(QString spart MEMBER spart)
+//    Q_PROPERTY(QVariantList translations MEMBER translations)
     explicit Spart(QObject *parent = nullptr);
 
-public:
+    QString translation;
+    QString spart;
 
+signals:
+
+public slots:
 
 };
 

@@ -15,7 +15,7 @@ public:
     explicit Core(QObject *parent = nullptr);
 
     static QVariantList getSuggestionJsonList(QNetworkReply * reply);
-    static QVariantList getTranslationJsonList(QNetworkReply *reply);
+    static QJsonArray getTranslationJsonList(QNetworkReply *reply);
 
 private:
     QNetworkAccessManager *_transport;

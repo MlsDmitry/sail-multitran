@@ -8,6 +8,9 @@ pkg_search_module(SAILFISH sailfishapp REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # does not produce the json file
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "") # works
+
 
 file(GLOB_RECURSE CPP_SOURCES "src/*.cpp")
 

@@ -1,6 +1,6 @@
 #include "spart.h"
 
-Spart(QObject *parent) : QObject(parent)
+Spart::Spart(QObject *parent) : QObject(parent)
 {
 
 }

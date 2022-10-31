@@ -7,9 +7,12 @@
 #include <QQmlContext>
 #include <QQuickView>
 #include <QGuiApplication>
+
 #include "core.h"
 #include "SuggestionListModel.h"
+#include "TranslationListModel.h"
 #include "demomodel.h"
+#include "spart.h"
 
 int main(int argc, char *argv[])
 {
@@ -32,8 +35,11 @@ int main(int argc, char *argv[])
     QQmlContext *context = view.data()->rootContext();
     context->setContextProperty("core", &core);
 
+//    qRegisterMetaType<Spart>("Spart");
+
+    qmlRegisterType<Spart>("harbour.multitran", 1, 0, "Spart");
     qmlRegisterType<SuggestionListModel>("harbour.multitran", 1, 0, "SuggestionListModel");
-    qmlRegisterType<SuggestionListModel>("harbour.multitran", 1, 0, "TranslationListModel");
+    qmlRegisterType<TranslationListModel>("harbour.multitran", 1, 0, "TranslationListModel");
 
 
     view->setSource(SailfishApp::pathTo("qml/sail-multitran.qml"));

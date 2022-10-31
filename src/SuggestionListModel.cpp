@@ -40,7 +40,7 @@ SuggestionListModel::onSuggestionsReceived()
     } else {
         try {
             QVariantList data = Core::getSuggestionJsonList(reply);
-            for (int i = 0; i != data.count(); i++) {
+            for (int i = 0; i != data.count(); ++i) {
                 newSuggestions.append(data[i].toMap()["str"].toString());
             }
         }  catch (std::runtime_error const &er) {

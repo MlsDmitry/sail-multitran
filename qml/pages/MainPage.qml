@@ -87,7 +87,10 @@ Page {
                 console.log(text)
             }
 
-            onFocusChanged: suggestionView.visible = focus;
+            onFocusChanged: {
+                translationView.visible = !focus;
+                suggestionView.visible = focus;
+            }
         }
 
 //        Connections {
@@ -101,6 +104,12 @@ Page {
 
         SuggestionListModel {
             id: suggestionListModel
+
+            transport: core.transport
+        }
+
+        TranslationListModel {
+            id: translationListModel
 
             transport: core.transport
         }
@@ -123,16 +132,14 @@ Page {
                 Label {
                     text: display
                 }
-                onClicked: translationListModel.getTranslations(text, core.toLang, core.fromLang)
+                onClicked: {
+                    translationView.visible = true;
+                    searchField.text = display
+                    translationListModel.getTranslations(display, core.toLang, core.fromLang);
+                }
             }
 
             VerticalScrollDecorator {}
-        }
-
-        TranslationListModel {
-            id: translationListModel
-
-            transport: core.transport
         }
 
         SilicaListView {
@@ -143,13 +150,25 @@ Page {
                 bottom: parent.bottom
             }
 
-            delegate: ListItem {
-                Label {
-                    text: display
+            width: parent.width
+            height: parent.height
+
+            section {
+                property: "spart"
+                criteria: ViewSection.FullString
+                delegate: SectionHeader {
+                    text: section
+//                    color: Theme.highlightColor
                 }
             }
 
+            delegate: Label {
+                    text: translation
+                }
+
             model: translationListModel
+
+            VerticalScrollDecorator {}
         }
 
     }
